@@ -1,0 +1,26 @@
+name: Cleanup Visual Studio
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  cleanup-vs2019:
+    runs-on: windows-2019
+    steps:
+      - name: Check Free Disk Space Before Cleanup
+        run: |
+          echo "Disk space before cleanup:"
+          df -h
+
+      - name: Remove Visual Studio 2019
+        run: |
+          echo "Running InstallCleanup.exe to remove Visual Studio 2019..."
+          "C:\Program Files (x86)\Microsoft Visual Studio\Installer\InstallCleanup.exe" -f
+        shell: cmd
+
+      - name: Check Free Disk Space After Cleanup
+        run: |
+          echo "Disk space after cleanup:"
+          df -h
