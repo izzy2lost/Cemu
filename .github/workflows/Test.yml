@@ -1,9 +1,7 @@
 name: Cleanup Visual Studio
 
 on:
-  push:
-    branches:
-      - main
+  workflow_dispatch
 
 jobs:
   cleanup-vs2019:
