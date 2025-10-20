@@ -54,7 +54,7 @@ Java_info_cemu_cemu_nativeinterface_NativeAccount_saveAccount(JNIEnv* env, [[may
 {
 	using namespace std::chrono;
 
-	jclass accountClass = env->FindClass("info/cemu/cemu/nativeinterface/NativeAccount$Account");
+	jclass accountClass = env->FindClass("com/izzy2lost/weeu/nativeinterface/NativeAccount$Account");
 	auto getAccountField = [&](const char* fieldName, const char* sig, auto getFieldFn) -> auto {
 		auto getField = std::bind(getFieldFn, env, account_java, std::placeholders::_1);
 		return getField(env->GetFieldID(accountClass, fieldName, sig));
@@ -101,7 +101,7 @@ extern "C" [[maybe_unused]] JNIEXPORT jobjectArray JNICALL
 Java_info_cemu_cemu_nativeinterface_NativeAccount_getAccounts(JNIEnv* env, [[maybe_unused]] jclass clazz)
 {
 	using namespace std::chrono;
-	jclass accountClass = env->FindClass("info/cemu/cemu/nativeinterface/NativeAccount$Account");
+	jclass accountClass = env->FindClass("com/izzy2lost/weeu/nativeinterface/NativeAccount$Account");
 	jmethodID accountCtrId = env->GetMethodID(accountClass, "<init>", "(ILjava/lang/String;JBLjava/lang/String;IZ)V");
 
 	const auto& accounts = Account::GetAccounts();
@@ -138,7 +138,7 @@ Java_info_cemu_cemu_nativeinterface_NativeAccount_getAccounts(JNIEnv* env, [[may
 extern "C" [[maybe_unused]] JNIEXPORT jobjectArray JNICALL
 Java_info_cemu_cemu_nativeinterface_NativeAccount_getAccountCountries(JNIEnv* env, [[maybe_unused]] jclass clazz)
 {
-	jclass countryClass = env->FindClass("info/cemu/cemu/nativeinterface/NativeAccount$AccountCountry");
+	jclass countryClass = env->FindClass("com/izzy2lost/weeu/nativeinterface/NativeAccount$AccountCountry");
 	jmethodID countryCtrId = env->GetMethodID(countryClass, "<init>", "(ILjava/lang/String;)V");
 
 	struct Country
@@ -184,13 +184,13 @@ Java_info_cemu_cemu_nativeinterface_NativeAccount_getAccountValidationErrors(JNI
 	auto newError = [&](const ErrorType& error, auto... args) {
 		return env->NewObject(error.first, error.second, args...);
 	};
-	auto missingOTPError = getErrorType("info/cemu/cemu/nativeinterface/NativeAccount$MissingOTP");
-	auto corruptedOTPError = getErrorType("info/cemu/cemu/nativeinterface/NativeAccount$CorruptedOTP");
-	auto missingSEEPROMError = getErrorType("info/cemu/cemu/nativeinterface/NativeAccount$MissingSEEPROM");
-	auto corruptedSEEPROMError = getErrorType("info/cemu/cemu/nativeinterface/NativeAccount$CorruptedSEEPROM");
-	auto missingFileError = getErrorType("info/cemu/cemu/nativeinterface/NativeAccount$MissingFile", "(Ljava/lang/String;)V");
-	auto accountError = getErrorType("info/cemu/cemu/nativeinterface/NativeAccount$AccountError", "(I)V");
-	auto baseErrorType = env->FindClass("info/cemu/cemu/nativeinterface/NativeAccount$OnlineValidationError");
+	auto missingOTPError = getErrorType("com/izzy2lost/weeu/nativeinterface/NativeAccount$MissingOTP");
+	auto corruptedOTPError = getErrorType("com/izzy2lost/weeu/nativeinterface/NativeAccount$CorruptedOTP");
+	auto missingSEEPROMError = getErrorType("com/izzy2lost/weeu/nativeinterface/NativeAccount$MissingSEEPROM");
+	auto corruptedSEEPROMError = getErrorType("com/izzy2lost/weeu/nativeinterface/NativeAccount$CorruptedSEEPROM");
+	auto missingFileError = getErrorType("com/izzy2lost/weeu/nativeinterface/NativeAccount$MissingFile", "(Ljava/lang/String;)V");
+	auto accountError = getErrorType("com/izzy2lost/weeu/nativeinterface/NativeAccount$AccountError", "(I)V");
+	auto baseErrorType = env->FindClass("com/izzy2lost/weeu/nativeinterface/NativeAccount$OnlineValidationError");
 
 	uint32 persistentId = persistent_id;
 	auto account = Account::GetAccount(persistentId);
