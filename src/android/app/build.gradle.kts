@@ -46,11 +46,11 @@ val cemuDataFilesFolder = "../../../bin"
 android {
     namespace = "info.cemu.cemu"
     compileSdk = 36
-    ndkVersion = "26.3.11579264"
+    ndkVersion = "29.0.14206865"
     defaultConfig {
         applicationId = "info.cemu.cemu"
         minSdk = 31
-        targetSdk = 35
+        targetSdk = 36
         versionCode = getVersionCode()
         versionName = getVersionName()
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
