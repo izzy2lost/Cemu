@@ -44,11 +44,11 @@ fun getVersionCode(): Int = System.getenv("VERSION_CODE")?.toIntOrNull() ?: 1
 val cemuDataFilesFolder = "../../../bin"
 
 android {
-    namespace = "info.cemu.cemu"
+    namespace = "com.izzy2lost.weeu"
     compileSdk = 36
     ndkVersion = "28.2.13676358"
     defaultConfig {
-        applicationId = "info.cemu.cemu"
+        applicationId = "com.izzy2lost.weeu"
         minSdk = 31
         targetSdk = 36
         versionCode = getVersionCode()
