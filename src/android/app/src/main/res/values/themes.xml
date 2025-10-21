@@ -1,8 +1,8 @@
 <resources>
 
-    <style name="Base.Theme.Cemu" parent="Theme.Material3.DynamicColors.Light" />
+    <style name="Base.Theme.WeeU" parent="Theme.Material3.DynamicColors.Light" />
 
-    <style name="Theme.Cemu" parent="Base.Theme.Cemu">
+    <style name="Theme.WeeU" parent="Base.Theme.WeeU">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
         <item name="android:navigationBarColor">@android:color/transparent</item>
