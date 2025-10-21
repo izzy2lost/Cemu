@@ -42,14 +42,14 @@ namespace NativeGameTitles
 } // namespace NativeGameTitles
 
 extern "C" [[maybe_unused]] JNIEXPORT jboolean JNICALL
-Java_info_cemu_cemu_nativeinterface_NativeGameTitles_isLoadingSharedLibrariesForTitleEnabled([[maybe_unused]] JNIEnv* env, [[maybe_unused]] jclass clazz, jlong game_title_id)
+Java_com_izzy2lost_weeu_nativeinterface_NativeGameTitles_isLoadingSharedLibrariesForTitleEnabled([[maybe_unused]] JNIEnv* env, [[maybe_unused]] jclass clazz, jlong game_title_id)
 {
 	NativeGameTitles::LoadGameProfile(game_title_id);
 	return NativeGameTitles::s_currentGameProfile.ShouldLoadSharedLibraries().value_or(false);
 }
 
 extern "C" [[maybe_unused]] JNIEXPORT void JNICALL
-Java_info_cemu_cemu_nativeinterface_NativeGameTitles_setLoadingSharedLibrariesForTitleEnabled([[maybe_unused]] JNIEnv* env, [[maybe_unused]] jclass clazz, jlong game_title_id, jboolean enabled)
+Java_com_izzy2lost_weeu_nativeinterface_NativeGameTitles_setLoadingSharedLibrariesForTitleEnabled([[maybe_unused]] JNIEnv* env, [[maybe_unused]] jclass clazz, jlong game_title_id, jboolean enabled)
 {
 	NativeGameTitles::LoadGameProfile(game_title_id);
 	NativeGameTitles::s_currentGameProfile.SetShouldLoadSharedLibraries(enabled);
@@ -57,14 +57,14 @@ Java_info_cemu_cemu_nativeinterface_NativeGameTitles_setLoadingSharedLibrariesFo
 }
 
 extern "C" [[maybe_unused]] JNIEXPORT jint JNICALL
-Java_info_cemu_cemu_nativeinterface_NativeGameTitles_getCpuModeForTitle([[maybe_unused]] JNIEnv* env, [[maybe_unused]] jclass clazz, jlong game_title_id)
+Java_com_izzy2lost_weeu_nativeinterface_NativeGameTitles_getCpuModeForTitle([[maybe_unused]] JNIEnv* env, [[maybe_unused]] jclass clazz, jlong game_title_id)
 {
 	NativeGameTitles::LoadGameProfile(game_title_id);
 	return static_cast<jint>(NativeGameTitles::s_currentGameProfile.GetCPUMode().value_or(CPUMode::Auto));
 }
 
 extern "C" [[maybe_unused]] JNIEXPORT void JNICALL
-Java_info_cemu_cemu_nativeinterface_NativeGameTitles_setCpuModeForTitle([[maybe_unused]] JNIEnv* env, [[maybe_unused]] jclass clazz, jlong game_title_id, jint cpu_mode)
+Java_com_izzy2lost_weeu_nativeinterface_NativeGameTitles_setCpuModeForTitle([[maybe_unused]] JNIEnv* env, [[maybe_unused]] jclass clazz, jlong game_title_id, jint cpu_mode)
 {
 	NativeGameTitles::LoadGameProfile(game_title_id);
 	NativeGameTitles::s_currentGameProfile.SetCPUMode(static_cast<CPUMode>(cpu_mode));
@@ -72,14 +72,14 @@ Java_info_cemu_cemu_nativeinterface_NativeGameTitles_setCpuModeForTitle([[maybe_
 }
 
 extern "C" [[maybe_unused]] JNIEXPORT jint JNICALL
-Java_info_cemu_cemu_nativeinterface_NativeGameTitles_getThreadQuantumForTitle([[maybe_unused]] JNIEnv* env, [[maybe_unused]] jclass clazz, jlong game_title_id)
+Java_com_izzy2lost_weeu_nativeinterface_NativeGameTitles_getThreadQuantumForTitle([[maybe_unused]] JNIEnv* env, [[maybe_unused]] jclass clazz, jlong game_title_id)
 {
 	NativeGameTitles::LoadGameProfile(game_title_id);
 	return NativeGameTitles::s_currentGameProfile.GetThreadQuantum();
 }
 
 extern "C" [[maybe_unused]] JNIEXPORT void JNICALL
-Java_info_cemu_cemu_nativeinterface_NativeGameTitles_setThreadQuantumForTitle([[maybe_unused]] JNIEnv* env, [[maybe_unused]] jclass clazz, jlong game_title_id, jint thread_quantum)
+Java_com_izzy2lost_weeu_nativeinterface_NativeGameTitles_setThreadQuantumForTitle([[maybe_unused]] JNIEnv* env, [[maybe_unused]] jclass clazz, jlong game_title_id, jint thread_quantum)
 {
 	NativeGameTitles::LoadGameProfile(game_title_id);
 	NativeGameTitles::s_currentGameProfile.SetThreadQuantum(std::clamp(thread_quantum, 5000, 536870912));
@@ -87,14 +87,14 @@ Java_info_cemu_cemu_nativeinterface_NativeGameTitles_setThreadQuantumForTitle([[
 }
 
 extern "C" [[maybe_unused]] JNIEXPORT jboolean JNICALL
-Java_info_cemu_cemu_nativeinterface_NativeGameTitles_isShaderMultiplicationAccuracyForTitleEnabled([[maybe_unused]] JNIEnv* env, [[maybe_unused]] jclass clazz, jlong game_title_id)
+Java_com_izzy2lost_weeu_nativeinterface_NativeGameTitles_isShaderMultiplicationAccuracyForTitleEnabled([[maybe_unused]] JNIEnv* env, [[maybe_unused]] jclass clazz, jlong game_title_id)
 {
 	NativeGameTitles::LoadGameProfile(game_title_id);
 	return NativeGameTitles::s_currentGameProfile.GetAccurateShaderMul() == AccurateShaderMulOption::True;
 }
 
 extern "C" [[maybe_unused]] JNIEXPORT void JNICALL
-Java_info_cemu_cemu_nativeinterface_NativeGameTitles_setShaderMultiplicationAccuracyForTitleEnabled([[maybe_unused]] JNIEnv* env, [[maybe_unused]] jclass clazz, jlong game_title_id, jboolean enabled)
+Java_com_izzy2lost_weeu_nativeinterface_NativeGameTitles_setShaderMultiplicationAccuracyForTitleEnabled([[maybe_unused]] JNIEnv* env, [[maybe_unused]] jclass clazz, jlong game_title_id, jboolean enabled)
 {
 	NativeGameTitles::LoadGameProfile(game_title_id);
 	NativeGameTitles::s_currentGameProfile.SetAccurateShaderMul(enabled ? AccurateShaderMulOption::True : AccurateShaderMulOption::False);
@@ -102,13 +102,13 @@ Java_info_cemu_cemu_nativeinterface_NativeGameTitles_setShaderMultiplicationAccu
 }
 
 extern "C" [[maybe_unused]] JNIEXPORT jboolean JNICALL
-Java_info_cemu_cemu_nativeinterface_NativeGameTitles_titleHasShaderCacheFiles([[maybe_unused]] JNIEnv* env, [[maybe_unused]] jclass clazz, jlong game_title_id)
+Java_com_izzy2lost_weeu_nativeinterface_NativeGameTitles_titleHasShaderCacheFiles([[maybe_unused]] JNIEnv* env, [[maybe_unused]] jclass clazz, jlong game_title_id)
 {
 	return !NativeGameTitles::getCachesPaths(game_title_id).empty();
 }
 
 extern "C" [[maybe_unused]] JNIEXPORT void JNICALL
-Java_info_cemu_cemu_nativeinterface_NativeGameTitles_removeShaderCacheFilesForTitle([[maybe_unused]] JNIEnv* env, [[maybe_unused]] jclass clazz, jlong game_title_id)
+Java_com_izzy2lost_weeu_nativeinterface_NativeGameTitles_removeShaderCacheFilesForTitle([[maybe_unused]] JNIEnv* env, [[maybe_unused]] jclass clazz, jlong game_title_id)
 {
 	std::error_code ec;
 	for (auto&& cacheFilePath : NativeGameTitles::getCachesPaths(game_title_id))
@@ -116,13 +116,13 @@ Java_info_cemu_cemu_nativeinterface_NativeGameTitles_removeShaderCacheFilesForTi
 }
 
 extern "C" [[maybe_unused]] JNIEXPORT void JNICALL
-Java_info_cemu_cemu_nativeinterface_NativeGameTitles_setGameTitleFavorite([[maybe_unused]] JNIEnv* env, [[maybe_unused]] jclass clazz, jlong game_title_id, jboolean isFavorite)
+Java_com_izzy2lost_weeu_nativeinterface_NativeGameTitles_setGameTitleFavorite([[maybe_unused]] JNIEnv* env, [[maybe_unused]] jclass clazz, jlong game_title_id, jboolean isFavorite)
 {
 	GetConfig().SetGameListFavorite(game_title_id, isFavorite);
 }
 
 extern "C" [[maybe_unused]] JNIEXPORT void JNICALL
-Java_info_cemu_cemu_nativeinterface_NativeGameTitles_setGameTitleLoadedCallback(JNIEnv* env, [[maybe_unused]] jclass clazz, jobject game_title_loaded_callback)
+Java_com_izzy2lost_weeu_nativeinterface_NativeGameTitles_setGameTitleLoadedCallback(JNIEnv* env, [[maybe_unused]] jclass clazz, jobject game_title_loaded_callback)
 {
 	if (game_title_loaded_callback == nullptr)
 	{
@@ -136,13 +136,13 @@ Java_info_cemu_cemu_nativeinterface_NativeGameTitles_setGameTitleLoadedCallback(
 }
 
 extern "C" [[maybe_unused]] JNIEXPORT void JNICALL
-Java_info_cemu_cemu_nativeinterface_NativeGameTitles_reloadGameTitles([[maybe_unused]] JNIEnv* env, [[maybe_unused]] jclass clazz)
+Java_com_izzy2lost_weeu_nativeinterface_NativeGameTitles_reloadGameTitles([[maybe_unused]] JNIEnv* env, [[maybe_unused]] jclass clazz)
 {
 	NativeGameTitles::s_gameTitleLoader.reloadGameTitles();
 }
 
 extern "C" [[maybe_unused]] JNIEXPORT jobject JNICALL
-Java_info_cemu_cemu_nativeinterface_NativeGameTitles_getInstalledGamesTitleIds(JNIEnv* env, [[maybe_unused]] jclass clazz)
+Java_com_izzy2lost_weeu_nativeinterface_NativeGameTitles_getInstalledGamesTitleIds(JNIEnv* env, [[maybe_unused]] jclass clazz)
 {
 	return JNIUtils::createJavaLongArrayList(env, CafeTitleList::GetAllTitleIds());
 }
@@ -301,7 +301,7 @@ class TitleListCallbacks
 };
 
 extern "C" [[maybe_unused]] JNIEXPORT void JNICALL
-Java_info_cemu_cemu_nativeinterface_NativeGameTitles_refreshCafeTitleList([[maybe_unused]] JNIEnv* env, [[maybe_unused]] jclass clazz)
+Java_com_izzy2lost_weeu_nativeinterface_NativeGameTitles_refreshCafeTitleList([[maybe_unused]] JNIEnv* env, [[maybe_unused]] jclass clazz)
 {
 	CafeTitleList::Refresh();
 }
@@ -309,7 +309,7 @@ Java_info_cemu_cemu_nativeinterface_NativeGameTitles_refreshCafeTitleList([[mayb
 std::unique_ptr<TitleListCallbacks> s_titleListCallbacks;
 
 extern "C" [[maybe_unused]] JNIEXPORT void JNICALL
-Java_info_cemu_cemu_nativeinterface_NativeGameTitles_setTitleListCallbacks([[maybe_unused]] JNIEnv* env, [[maybe_unused]] jclass clazz, jobject title_list_callbacks)
+Java_com_izzy2lost_weeu_nativeinterface_NativeGameTitles_setTitleListCallbacks([[maybe_unused]] JNIEnv* env, [[maybe_unused]] jclass clazz, jobject title_list_callbacks)
 {
 	if (title_list_callbacks == nullptr)
 		s_titleListCallbacks = nullptr;
@@ -320,7 +320,7 @@ Java_info_cemu_cemu_nativeinterface_NativeGameTitles_setTitleListCallbacks([[may
 std::unique_ptr<SaveListCallback> s_saveListCallback;
 
 extern "C" [[maybe_unused]] JNIEXPORT void JNICALL
-Java_info_cemu_cemu_nativeinterface_NativeGameTitles_setSaveListCallback([[maybe_unused]] JNIEnv* env, [[maybe_unused]] jclass clazz, jobject save_list_callback)
+Java_com_izzy2lost_weeu_nativeinterface_NativeGameTitles_setSaveListCallback([[maybe_unused]] JNIEnv* env, [[maybe_unused]] jclass clazz, jobject save_list_callback)
 {
 	if (save_list_callback == nullptr)
 		s_saveListCallback = nullptr;
@@ -329,7 +329,7 @@ Java_info_cemu_cemu_nativeinterface_NativeGameTitles_setSaveListCallback([[maybe
 }
 
 extern "C" [[maybe_unused]] JNIEXPORT jobject JNICALL
-Java_info_cemu_cemu_nativeinterface_NativeGameTitles_checkIfTitleExists(JNIEnv* env, [[maybe_unused]] jclass clazz, jstring meta_path)
+Java_com_izzy2lost_weeu_nativeinterface_NativeGameTitles_checkIfTitleExists(JNIEnv* env, [[maybe_unused]] jclass clazz, jstring meta_path)
 {
 	TitleInfo titleInfo(fs::path(JNIUtils::toString(env, meta_path)));
 
@@ -398,7 +398,7 @@ Java_info_cemu_cemu_nativeinterface_NativeGameTitles_checkIfTitleExists(JNIEnv* 
 }
 
 extern "C" [[maybe_unused]] JNIEXPORT void JNICALL
-Java_info_cemu_cemu_nativeinterface_NativeGameTitles_addTitleFromPath(JNIEnv* env, [[maybe_unused]] jclass clazz, jstring path)
+Java_com_izzy2lost_weeu_nativeinterface_NativeGameTitles_addTitleFromPath(JNIEnv* env, [[maybe_unused]] jclass clazz, jstring path)
 {
 	CafeTitleList::AddTitleFromPath(fs::path(JNIUtils::toString(env, path)));
 }
@@ -410,7 +410,7 @@ struct Title
 };
 
 extern "C" [[maybe_unused]] JNIEXPORT jobject JNICALL
-Java_info_cemu_cemu_nativeinterface_NativeGameTitles_queueTitleToCompress(JNIEnv* env, [[maybe_unused]] jclass clazz, jlong titleId, jlong selectedUID, jobject titlesCallback)
+Java_com_izzy2lost_weeu_nativeinterface_NativeGameTitles_queueTitleToCompress(JNIEnv* env, [[maybe_unused]] jclass clazz, jlong titleId, jlong selectedUID, jobject titlesCallback)
 {
 	jclass titlesCallbackClass = env->GetObjectClass(titlesCallback);
 	jmethodID getTitlesMID = env->GetMethodID(titlesCallbackClass, "getTitlesByTitleId", "(J)[Lcom/izzy2lost/weeu/nativeinterface/NativeGameTitles$TitleIdToTitlesCallback$Title;");
@@ -511,7 +511,7 @@ Java_info_cemu_cemu_nativeinterface_NativeGameTitles_queueTitleToCompress(JNIEnv
 }
 
 extern "C" [[maybe_unused]] JNIEXPORT jstring JNICALL
-Java_info_cemu_cemu_nativeinterface_NativeGameTitles_getCompressedFileNameForQueuedTitle(JNIEnv* env, [[maybe_unused]] jclass clazz)
+Java_com_izzy2lost_weeu_nativeinterface_NativeGameTitles_getCompressedFileNameForQueuedTitle(JNIEnv* env, [[maybe_unused]] jclass clazz)
 {
 	if (NativeGameTitles::s_wuaConverter == nullptr)
 		return nullptr;
@@ -519,7 +519,7 @@ Java_info_cemu_cemu_nativeinterface_NativeGameTitles_getCompressedFileNameForQue
 }
 
 extern "C" [[maybe_unused]] JNIEXPORT void JNICALL
-Java_info_cemu_cemu_nativeinterface_NativeGameTitles_compressQueuedTitle([[maybe_unused]] JNIEnv* env, [[maybe_unused]] jclass clazz, jint fd, jobject compressTitleCallbacks)
+Java_com_izzy2lost_weeu_nativeinterface_NativeGameTitles_compressQueuedTitle([[maybe_unused]] JNIEnv* env, [[maybe_unused]] jclass clazz, jint fd, jobject compressTitleCallbacks)
 {
 	if (NativeGameTitles::s_wuaConverter == nullptr)
 		return;
@@ -527,7 +527,7 @@ Java_info_cemu_cemu_nativeinterface_NativeGameTitles_compressQueuedTitle([[maybe
 }
 
 extern "C" [[maybe_unused]] JNIEXPORT jlong JNICALL
-Java_info_cemu_cemu_nativeinterface_NativeGameTitles_getCurrentProgressForCompression([[maybe_unused]] JNIEnv* env, [[maybe_unused]] jclass clazz)
+Java_com_izzy2lost_weeu_nativeinterface_NativeGameTitles_getCurrentProgressForCompression([[maybe_unused]] JNIEnv* env, [[maybe_unused]] jclass clazz)
 {
 	if (NativeGameTitles::s_wuaConverter == nullptr)
 		return 0L;
@@ -535,7 +535,7 @@ Java_info_cemu_cemu_nativeinterface_NativeGameTitles_getCurrentProgressForCompre
 }
 
 extern "C" [[maybe_unused]] JNIEXPORT void JNICALL
-Java_info_cemu_cemu_nativeinterface_NativeGameTitles_cancelTitleCompression([[maybe_unused]] JNIEnv* env, [[maybe_unused]] jclass clazz)
+Java_com_izzy2lost_weeu_nativeinterface_NativeGameTitles_cancelTitleCompression([[maybe_unused]] JNIEnv* env, [[maybe_unused]] jclass clazz)
 {
 	if (NativeGameTitles::s_wuaConverter == nullptr)
 		return;

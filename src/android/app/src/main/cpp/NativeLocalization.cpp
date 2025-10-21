@@ -16,7 +16,7 @@ namespace NativeLocalization
 } // namespace NativeLocalization
 
 extern "C" [[maybe_unused]] JNIEXPORT void JNICALL
-Java_info_cemu_cemu_nativeinterface_NativeLocalization_setTranslations(JNIEnv* env, [[maybe_unused]] jclass clazz, jobject translations)
+Java_com_izzy2lost_weeu_nativeinterface_NativeLocalization_setTranslations(JNIEnv* env, [[maybe_unused]] jclass clazz, jobject translations)
 {
     NativeLocalization::g_messages.clear();
 

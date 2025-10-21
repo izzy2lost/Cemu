@@ -17,7 +17,7 @@
 #include "Cemu/ncrypto/ncrypto.h"
 
 extern "C" [[maybe_unused]] JNIEXPORT void JNICALL
-Java_info_cemu_cemu_nativeinterface_NativeAccount_createAccount(JNIEnv* env, [[maybe_unused]] jclass clazz, jint persistent_id, jstring mii_name)
+Java_com_izzy2lost_weeu_nativeinterface_NativeAccount_createAccount(JNIEnv* env, [[maybe_unused]] jclass clazz, jint persistent_id, jstring mii_name)
 {
 	uint32 persistentId = static_cast<uint32>(persistent_id);
 	std::string miiName = JNIUtils::toString(env, mii_name);
@@ -27,7 +27,7 @@ Java_info_cemu_cemu_nativeinterface_NativeAccount_createAccount(JNIEnv* env, [[m
 }
 
 extern "C" [[maybe_unused]] JNIEXPORT void JNICALL
-Java_info_cemu_cemu_nativeinterface_NativeAccount_deleteAccount([[maybe_unused]] JNIEnv* env, [[maybe_unused]] jclass clazz, jint persistent_id)
+Java_com_izzy2lost_weeu_nativeinterface_NativeAccount_deleteAccount([[maybe_unused]] JNIEnv* env, [[maybe_unused]] jclass clazz, jint persistent_id)
 {
 	uint32 persistentId = static_cast<uint32>(persistent_id);
 	const auto& account = Account::GetAccount(persistentId);
@@ -50,7 +50,7 @@ Java_info_cemu_cemu_nativeinterface_NativeAccount_deleteAccount([[maybe_unused]]
 }
 
 extern "C" [[maybe_unused]] JNIEXPORT void JNICALL
-Java_info_cemu_cemu_nativeinterface_NativeAccount_saveAccount(JNIEnv* env, [[maybe_unused]] jclass clazz, jobject account_java)
+Java_com_izzy2lost_weeu_nativeinterface_NativeAccount_saveAccount(JNIEnv* env, [[maybe_unused]] jclass clazz, jobject account_java)
 {
 	using namespace std::chrono;
 
@@ -98,7 +98,7 @@ jlong toUnixTimestampMillis(std::chrono::year_month_day ymd)
 }
 
 extern "C" [[maybe_unused]] JNIEXPORT jobjectArray JNICALL
-Java_info_cemu_cemu_nativeinterface_NativeAccount_getAccounts(JNIEnv* env, [[maybe_unused]] jclass clazz)
+Java_com_izzy2lost_weeu_nativeinterface_NativeAccount_getAccounts(JNIEnv* env, [[maybe_unused]] jclass clazz)
 {
 	using namespace std::chrono;
 	jclass accountClass = env->FindClass("com/izzy2lost/weeu/nativeinterface/NativeAccount$Account");
@@ -136,7 +136,7 @@ Java_info_cemu_cemu_nativeinterface_NativeAccount_getAccounts(JNIEnv* env, [[may
 }
 
 extern "C" [[maybe_unused]] JNIEXPORT jobjectArray JNICALL
-Java_info_cemu_cemu_nativeinterface_NativeAccount_getAccountCountries(JNIEnv* env, [[maybe_unused]] jclass clazz)
+Java_com_izzy2lost_weeu_nativeinterface_NativeAccount_getAccountCountries(JNIEnv* env, [[maybe_unused]] jclass clazz)
 {
 	jclass countryClass = env->FindClass("com/izzy2lost/weeu/nativeinterface/NativeAccount$AccountCountry");
 	jmethodID countryCtrId = env->GetMethodID(countryClass, "<init>", "(ILjava/lang/String;)V");
@@ -172,7 +172,7 @@ Java_info_cemu_cemu_nativeinterface_NativeAccount_getAccountCountries(JNIEnv* en
 }
 
 extern "C" [[maybe_unused]] JNIEXPORT jobjectArray JNICALL
-Java_info_cemu_cemu_nativeinterface_NativeAccount_getAccountValidationErrors(JNIEnv* env, [[maybe_unused]] jclass clazz, jint persistent_id)
+Java_com_izzy2lost_weeu_nativeinterface_NativeAccount_getAccountValidationErrors(JNIEnv* env, [[maybe_unused]] jclass clazz, jint persistent_id)
 {
 	using ErrorType = std::pair<jclass, jmethodID>;
 	auto getErrorType = [&](const char* className, const char* ctrSig = "()V") -> ErrorType {
@@ -244,13 +244,13 @@ Java_info_cemu_cemu_nativeinterface_NativeAccount_getAccountValidationErrors(JNI
 }
 
 extern "C" [[maybe_unused]] JNIEXPORT jboolean JNICALL
-Java_info_cemu_cemu_nativeinterface_NativeAccount_isOTPPresent([[maybe_unused]] JNIEnv* env, [[maybe_unused]] jclass clazz)
+Java_com_izzy2lost_weeu_nativeinterface_NativeAccount_isOTPPresent([[maybe_unused]] JNIEnv* env, [[maybe_unused]] jclass clazz)
 {
 	return NCrypto::OTP_IsPresent();
 }
 
 extern "C" [[maybe_unused]] JNIEXPORT jboolean JNICALL
-Java_info_cemu_cemu_nativeinterface_NativeAccount_isSEEPROMPresent([[maybe_unused]] JNIEnv* env, [[maybe_unused]] jclass clazz)
+Java_com_izzy2lost_weeu_nativeinterface_NativeAccount_isSEEPROMPresent([[maybe_unused]] JNIEnv* env, [[maybe_unused]] jclass clazz)
 {
 	return NCrypto::SEEPROM_IsPresent();
 }
