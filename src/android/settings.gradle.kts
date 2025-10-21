@@ -19,6 +19,6 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "Cemu"
+rootProject.name = "Wee U"
 include(":app")
  
