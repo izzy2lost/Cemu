@@ -130,7 +130,7 @@ Java_info_cemu_cemu_nativeinterface_NativeGameTitles_setGameTitleLoadedCallback(
 		return;
 	}
 	jclass gameTitleLoadedCallbackClass = env->GetObjectClass(game_title_loaded_callback);
-	jmethodID onGameTitleLoadedMID = env->GetMethodID(gameTitleLoadedCallbackClass, "onGameTitleLoaded", "(Lcom/izzy2lost/weeu/nativeinterface/NativeGameTitles$Game;)V");
+	jmethodID onGameTitleLoadedMID = env->GetMethodID(gameTitleLoadedCallbackClass, "onGameTitleLoaded", "(Linfo/cemu/cemu/nativeinterface/NativeGameTitles$Game;)V");
 	env->DeleteLocalRef(gameTitleLoadedCallbackClass);
 	NativeGameTitles::s_gameTitleLoader.setOnTitleLoaded(std::make_shared<AndroidGameTitleLoadedCallback>(onGameTitleLoadedMID, game_title_loaded_callback));
 }
@@ -194,9 +194,9 @@ class SaveListCallback
 	{
 		JNIUtils::ScopedJNIENV env;
 		m_saveListCallbackObj = JNIUtils::Scopedjobject(saveListCallbackObject);
-		JNIUtils::Scopedjclass saveCallbacksClass{"com/izzy2lost/weeu/nativeinterface/NativeGameTitles$SaveListCallback"};
-		m_onSaveDiscoveredMID = env->GetMethodID(*saveCallbacksClass, "onSaveDiscovered", "(Lcom/izzy2lost/weeu/nativeinterface/NativeGameTitles$SaveData;)V");
-		m_saveDataClass = JNIUtils::Scopedjclass("com/izzy2lost/weeu/nativeinterface/NativeGameTitles$SaveData");
+		JNIUtils::Scopedjclass saveCallbacksClass{"info/cemu/cemu/nativeinterface/NativeGameTitles$SaveListCallback"};
+		m_onSaveDiscoveredMID = env->GetMethodID(*saveCallbacksClass, "onSaveDiscovered", "(Linfo/cemu/cemu/nativeinterface/NativeGameTitles$SaveData;)V");
+		m_saveDataClass = JNIUtils::Scopedjclass("info/cemu/cemu/nativeinterface/NativeGameTitles$SaveData");
 		m_saveDataConstructorMID = env->GetMethodID(*m_saveDataClass, "<init>", "(Ljava/lang/String;Ljava/lang/String;JJSI)V");
 		m_callbackIdSaveList = CafeSaveList::RegisterCallback(
 			[](CafeSaveListCallbackEvent* evt, void* ctx) {
@@ -281,11 +281,11 @@ class TitleListCallbacks
 	{
 		JNIUtils::ScopedJNIENV env;
 		m_titleListCallbacksObj = JNIUtils::Scopedjobject(titleListCallbacks);
-		jclass titleCallbacksClass = env->FindClass("com/izzy2lost/weeu/nativeinterface/NativeGameTitles$TitleListCallbacks");
-		m_onTitleDiscoveredMID = env->GetMethodID(titleCallbacksClass, "onTitleDiscovered", "(Lcom/izzy2lost/weeu/nativeinterface/NativeGameTitles$TitleData;)V");
+		jclass titleCallbacksClass = env->FindClass("info/cemu/cemu/nativeinterface/NativeGameTitles$TitleListCallbacks");
+		m_onTitleDiscoveredMID = env->GetMethodID(titleCallbacksClass, "onTitleDiscovered", "(Linfo/cemu/cemu/nativeinterface/NativeGameTitles$TitleData;)V");
 		m_onTitleRemovedMID = env->GetMethodID(titleCallbacksClass, "onTitleRemoved", "(J)V");
 		env->DeleteLocalRef(titleCallbacksClass);
-		m_titleDataClass = JNIUtils::Scopedjclass("com/izzy2lost/weeu/nativeinterface/NativeGameTitles$TitleData");
+		m_titleDataClass = JNIUtils::Scopedjclass("info/cemu/cemu/nativeinterface/NativeGameTitles$TitleData");
 		m_titleDataConstructorMID = env->GetMethodID(*m_titleDataClass, "<init>", "(Ljava/lang/String;Ljava/lang/String;JJSIII)V");
 		m_callbackIdTitleList = CafeTitleList::RegisterCallback(
 			[](CafeTitleListCallbackEvent* evt, void* ctx) {
@@ -340,11 +340,11 @@ Java_info_cemu_cemu_nativeinterface_NativeGameTitles_checkIfTitleExists(JNIEnv* 
 
 	auto createTitleExistsStatus = [&](jobject existsError = nullptr) {
 		if (existsError == nullptr)
-			existsError = JNIUtils::newObject(env, "com/izzy2lost/weeu/nativeinterface/NativeGameTitles$TitleExistsError$None");
+			existsError = JNIUtils::newObject(env, "info/cemu/cemu/nativeinterface/NativeGameTitles$TitleExistsError$None");
 		return JNIUtils::newObject(
 			env,
-			"com/izzy2lost/weeu/nativeinterface/NativeGameTitles$TitleExistsStatus",
-			"(Lcom/izzy2lost/weeu/nativeinterface/NativeGameTitles$TitleExistsError;Ljava/lang/String;)V",
+			"info/cemu/cemu/nativeinterface/NativeGameTitles$TitleExistsStatus",
+			"(Linfo/cemu/cemu/nativeinterface/NativeGameTitles$TitleExistsError;Ljava/lang/String;)V",
 			existsError,
 			JNIUtils::toJString(env, target_location));
 	};
@@ -373,7 +373,7 @@ Java_info_cemu_cemu_nativeinterface_NativeGameTitles_checkIfTitleExists(JNIEnv* 
 		{
 			jobject err = JNIUtils::newObject(
 				env,
-				"com/izzy2lost/weeu/nativeinterface/NativeGameTitles$TitleExistsError$DifferentType",
+				"info/cemu/cemu/nativeinterface/NativeGameTitles$TitleExistsError$DifferentType",
 				"(II)V",
 				oldType,
 				toInstallType);
@@ -381,12 +381,12 @@ Java_info_cemu_cemu_nativeinterface_NativeGameTitles_checkIfTitleExists(JNIEnv* 
 		}
 		else if (tmp.GetAppTitleVersion() == titleInfo.GetAppTitleVersion())
 		{
-			jobject err = JNIUtils::newObject(env, "com/izzy2lost/weeu/nativeinterface/NativeGameTitles$TitleExistsError$SameVersion");
+			jobject err = JNIUtils::newObject(env, "info/cemu/cemu/nativeinterface/NativeGameTitles$TitleExistsError$SameVersion");
 			return createTitleExistsStatus(err);
 		}
 		else if (tmp.GetAppTitleVersion() > titleInfo.GetAppTitleVersion())
 		{
-			jobject err = JNIUtils::newObject(env, "com/izzy2lost/weeu/nativeinterface/NativeGameTitles$TitleExistsError$NewVersion");
+			jobject err = JNIUtils::newObject(env, "info/cemu/cemu/nativeinterface/NativeGameTitles$TitleExistsError$NewVersion");
 			return createTitleExistsStatus(err);
 		}
 	} catch (const std::exception& ex)
@@ -413,8 +413,8 @@ extern "C" [[maybe_unused]] JNIEXPORT jobject JNICALL
 Java_info_cemu_cemu_nativeinterface_NativeGameTitles_queueTitleToCompress(JNIEnv* env, [[maybe_unused]] jclass clazz, jlong titleId, jlong selectedUID, jobject titlesCallback)
 {
 	jclass titlesCallbackClass = env->GetObjectClass(titlesCallback);
-	jmethodID getTitlesMID = env->GetMethodID(titlesCallbackClass, "getTitlesByTitleId", "(J)[Lcom/izzy2lost/weeu/nativeinterface/NativeGameTitles$TitleIdToTitlesCallback$Title;");
-	jclass titleClass = env->FindClass("com/izzy2lost/weeu/nativeinterface/NativeGameTitles$TitleIdToTitlesCallback$Title");
+	jmethodID getTitlesMID = env->GetMethodID(titlesCallbackClass, "getTitlesByTitleId", "(J)[Linfo/cemu/cemu/nativeinterface/NativeGameTitles$TitleIdToTitlesCallback$Title;");
+	jclass titleClass = env->FindClass("info/cemu/cemu/nativeinterface/NativeGameTitles$TitleIdToTitlesCallback$Title");
 	jfieldID versionFieldId = env->GetFieldID(titleClass, "version", "S");
 	jfieldID titleUIDFieldId = env->GetFieldID(titleClass, "titleUID", "J");
 
@@ -502,7 +502,7 @@ Java_info_cemu_cemu_nativeinterface_NativeGameTitles_queueTitleToCompress(JNIEnv
 
 	jobject compressTitleInfo = JNIUtils::newObject(
 		env,
-		"com/izzy2lost/weeu/nativeinterface/NativeGameTitles$CompressTitleInfo",
+		"info/cemu/cemu/nativeinterface/NativeGameTitles$CompressTitleInfo",
 		"(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)V",
 		getTitlePrintPath(titleInfo_base),
 		getTitlePrintPath(titleInfo_update),

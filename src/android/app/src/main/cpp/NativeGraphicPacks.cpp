@@ -42,7 +42,7 @@ namespace NativeGraphicPacks
 
 	jobject getGraphicPresets(JNIEnv* env, GraphicPackPtr graphicPack, sint64 id)
 	{
-		auto graphicPackPresetClass = env->FindClass("com/izzy2lost/weeu/nativeinterface/NativeGraphicPacks$GraphicPackPreset");
+		auto graphicPackPresetClass = env->FindClass("info/cemu/cemu/nativeinterface/NativeGraphicPacks$GraphicPackPreset");
 		auto graphicPackPresetCtorId = env->GetMethodID(graphicPackPresetClass, "<init>", "(JLjava/lang/String;Ljava/util/ArrayList;Ljava/lang/String;)V");
 
 		std::vector<std::string> order;
@@ -98,7 +98,7 @@ Java_info_cemu_cemu_nativeinterface_NativeGraphicPacks_refreshGraphicPacks([[may
 extern "C" [[maybe_unused]] JNIEXPORT jobject JNICALL
 Java_info_cemu_cemu_nativeinterface_NativeGraphicPacks_getGraphicPackBasicInfos(JNIEnv* env, [[maybe_unused]] jclass clazz)
 {
-	auto graphicPackInfoClass = env->FindClass("com/izzy2lost/weeu/nativeinterface/NativeGraphicPacks$GraphicPackBasicInfo");
+	auto graphicPackInfoClass = env->FindClass("info/cemu/cemu/nativeinterface/NativeGraphicPacks$GraphicPackBasicInfo");
 	auto graphicPackInfoCtorId = env->GetMethodID(graphicPackInfoClass, "<init>", "(JLjava/lang/String;ZLjava/util/ArrayList;)V");
 
 	std::vector<jobject> graphicPackInfoJObjects;
@@ -117,7 +117,7 @@ Java_info_cemu_cemu_nativeinterface_NativeGraphicPacks_getGraphicPackBasicInfos(
 extern "C" [[maybe_unused]] JNIEXPORT jobject JNICALL
 Java_info_cemu_cemu_nativeinterface_NativeGraphicPacks_getGraphicPack(JNIEnv* env, [[maybe_unused]] jclass clazz, jlong id)
 {
-	auto graphicPackClass = env->FindClass("com/izzy2lost/weeu/nativeinterface/NativeGraphicPacks$GraphicPack");
+	auto graphicPackClass = env->FindClass("info/cemu/cemu/nativeinterface/NativeGraphicPacks$GraphicPack");
 	auto graphicPackCtorId = env->GetMethodID(graphicPackClass, "<init>", "(JZLjava/lang/String;Ljava/lang/String;Ljava/util/ArrayList;)V");
 	auto graphicPack = NativeGraphicPacks::s_graphicPacks.at(id);
 
