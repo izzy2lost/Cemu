@@ -56,3 +56,4 @@ bin/graphicPacks/*
 # Ignore Finder view option files created by OS X
 .DS_Store
 .kilocode/mcp.json
+vcpkg-android-arm64.tar.gz
