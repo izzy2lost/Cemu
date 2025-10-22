@@ -1,0 +1,172 @@
+name: Build vcpkg Android Dependencies
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build-vcpkg-android:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+      
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+      
+      - name: Install CMake
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y cmake ninja-build
+      
+      - name: Setup Android NDK
+        uses: nttld/setup-ndk@v1
+        id: setup-ndk
+        with:
+          ndk-version: r28
+          add-to-path: true
+      
+      - name: Cache vcpkg
+        uses: actions/cache@v4
+        with:
+          path: |
+            dependencies/vcpkg/installed
+            dependencies/vcpkg/buildtrees
+            dependencies/vcpkg/packages
+          key: vcpkg-android-arm64-${{ hashFiles('vcpkg.json') }}
+          restore-keys: |
+            vcpkg-android-arm64-
+      
+      - name: Bootstrap vcpkg
+        run: |
+          cd dependencies/vcpkg
+          ./bootstrap-vcpkg.sh
+      
+      - name: Build vcpkg dependencies for arm64-v8a
+        env:
+          ANDROID_NDK_HOME: ${{ steps.setup-ndk.outputs.ndk-path }}
+          VCPKG_ROOT: ${{ github.workspace }}/dependencies/vcpkg
+        run: |
+          cd dependencies/vcpkg
+          
+          # Install dependencies for Android arm64-v8a
+          ./vcpkg install \
+            --triplet=arm64-android \
+            --overlay-ports=${{ github.workspace }}/dependencies/vcpkg_overlay_ports \
+            --x-manifest-root=${{ github.workspace }} \
+            --x-install-root=${{ github.workspace }}/dependencies/vcpkg/installed
+      
+      - name: Package vcpkg installed directory
+        run: |
+          cd dependencies/vcpkg
+          tar -czf vcpkg-android-arm64.tar.gz installed/arm64-android
+      
+      - name: Upload vcpkg dependencies artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: vcpkg-android-arm64
+          path: dependencies/vcpkg/vcpkg-android-arm64.tar.gz
+          retention-days: 30
+      
+      - name: Create installation instructions
+        run: |
+          cat > VCPKG_INSTALL_INSTRUCTIONS.md << 'EOF'
+          # vcpkg Android Dependencies Installation
+          
+          ## ABI: arm64-v8a (arm64-android triplet)
+          
+          ### Installation Steps:
+          
+          1. Download the artifact `vcpkg-android-arm64.tar.gz` from the workflow run
+          
+          2. Extract to your local repository:
+          
+          **On Linux/macOS:**
+          ```bash
+          cd /path/to/WeeU
+          tar -xzf vcpkg-android-arm64.tar.gz -C dependencies/vcpkg/
+          ```
+          
+          **On Windows (PowerShell):**
+          ```powershell
+          cd C:\path\to\WeeU
+          tar -xzf vcpkg-android-arm64.tar.gz -C dependencies\vcpkg\
+          ```
+          
+          **On Windows (using 7-Zip or WinRAR):**
+          - Extract the .tar.gz file to get the .tar file
+          - Extract the .tar file
+          - Copy the `installed` folder to `dependencies\vcpkg\`
+          
+          3. The dependencies will be extracted to:
+          ```
+          dependencies/vcpkg/installed/arm64-android/
+          ```
+          
+          4. You can now build the Android app locally without vcpkg downloading dependencies:
+          
+          **On Linux/macOS:**
+          ```bash
+          cd src/android
+          ./gradlew assembleRelease
+          ```
+          
+          **On Windows:**
+          ```powershell
+          cd src\android
+          .\gradlew.bat assembleRelease
+          ```
+          
+          ### What's included:
+          - All vcpkg dependencies specified in vcpkg.json for Android
+          - Pre-built libraries for arm64-v8a architecture (works on all platforms)
+          - Headers and CMake configuration files
+          - Boost, OpenSSL, libzip, curl, and all other dependencies
+          
+          ### Platform Compatibility:
+          - ✅ **Windows**: Fully supported - Android NDK builds work the same
+          - ✅ **Linux**: Fully supported
+          - ✅ **macOS**: Fully supported
+          - The dependencies are cross-platform because they're for Android target, not host OS
+          
+          ### Notes:
+          - This is for arm64-v8a only (the only ABI configured in the project)
+          - Dependencies are cached and will be reused if vcpkg.json hasn't changed
+          - Total size is approximately 500MB-1GB compressed
+          - Works on Windows, Linux, and macOS because Android builds are cross-platform
+          
+          ### Requirements:
+          - Android NDK r28 (or compatible version)
+          - CMake 3.25+
+          - Java 17+
+          
+          ### Troubleshooting:
+          
+          **On Windows:**
+          - If build fails, ensure the extracted path matches: `dependencies\vcpkg\installed\arm64-android\`
+          - Verify extraction: `dir dependencies\vcpkg\installed\arm64-android\`
+          - Make sure you have Android NDK installed via Android Studio or standalone
+          - Set ANDROID_NDK_HOME environment variable if needed
+          
+          **On Linux/macOS:**
+          - If build fails, ensure the extracted path matches: `dependencies/vcpkg/installed/arm64-android/`
+          - Verify extraction: `ls -la dependencies/vcpkg/installed/arm64-android/`
+          - Make sure you have Android NDK r28 installed
+          
+          **General:**
+          - Clear the vcpkg cache if you encounter issues: `rm -rf dependencies/vcpkg/installed` (or `rmdir /s dependencies\vcpkg\installed` on Windows)
+          - The Android build uses CMake which is cross-platform
+          - Dependencies are built for Android ARM64, not your host OS
+          EOF
+      
+      - name: Upload installation instructions
+        uses: actions/upload-artifact@v4
+        with:
+          name: vcpkg-installation-instructions
+          path: VCPKG_INSTALL_INSTRUCTIONS.md
+          retention-days: 30
