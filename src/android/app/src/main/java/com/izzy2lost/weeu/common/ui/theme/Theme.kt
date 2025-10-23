@@ -11,24 +11,58 @@ import androidx.compose.material3.dynamicDarkColorScheme
 import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
-private val DarkColorScheme = darkColorScheme()
+// Wee U brand color
+private val WeeUCyan = Color(0xFF009ac7)
+private val WeeUCyanLight = Color(0xFF33b0d5)
+private val WeeUCyanDark = Color(0xFF007a9f)
 
-private val LightColorScheme = lightColorScheme()
+// Dark theme with cyan background and accents
+private val DarkColorScheme = darkColorScheme(
+    primary = WeeUCyan,
+    onPrimary = Color.White,
+    primaryContainer = WeeUCyanDark,
+    onPrimaryContainer = Color.White,
+    secondary = WeeUCyanLight,
+    onSecondary = Color.White,
+    background = WeeUCyan,
+    onBackground = Color.White,
+    surface = WeeUCyan,
+    onSurface = Color.White,
+    surfaceVariant = WeeUCyanDark,
+    onSurfaceVariant = Color.White,
+)
+
+// Light theme with cyan text and accents
+private val LightColorScheme = lightColorScheme(
+    primary = WeeUCyan,
+    onPrimary = Color.White,
+    primaryContainer = WeeUCyanLight,
+    onPrimaryContainer = WeeUCyan,
+    secondary = WeeUCyanDark,
+    onSecondary = Color.White,
+    background = Color.White,
+    onBackground = WeeUCyan,
+    surface = Color.White,
+    onSurface = WeeUCyan,
+    surfaceVariant = Color(0xFFF5F5F5),
+    onSurfaceVariant = WeeUCyan,
+)
 
 /**
  * Material 3 Expressive theme for Wee U
- * Features dynamic color support and expressive typography/shapes
+ * Features custom cyan color scheme and expressive typography/shapes
  */
 @Composable
 fun WeeUTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
-    dynamicColor: Boolean = true,
+    dynamicColor: Boolean = false, // Disabled by default to use custom cyan colors
     content: @Composable () -> Unit,
 ) {
     val colorScheme = when {
