@@ -125,6 +125,13 @@ if !JAVA_MAJOR! LSS 21 (
     echo Java !JAVA_MAJOR! detected.
 )
 
+REM Set environment variable to use pre-installed vcpkg dependencies
+set "VCPKG_ROOT=%CD%\dependencies\vcpkg"
+set "ANDROID_NDK_HOME=C:\Android\ndk\28.2.13676358"
+
+echo VCPKG_ROOT set to: %VCPKG_ROOT%
+echo ANDROID_NDK_HOME set to: %ANDROID_NDK_HOME%
+
 REM Build the Android app
 echo.
 echo ========================================
