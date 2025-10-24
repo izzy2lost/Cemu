@@ -15,8 +15,10 @@ import androidx.compose.animation.ExitTransition
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.MoreVert
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
@@ -46,6 +48,12 @@ import com.izzy2lost.weeu.nativeinterface.NativeActiveSettings
 import com.izzy2lost.weeu.nativeinterface.NativeGameTitles.Game
 import com.izzy2lost.weeu.nativeinterface.NativeSettings
 import com.izzy2lost.weeu.provider.DocumentsProvider
+import com.izzy2lost.weeu.settings.AccountSettingsRoute
+import com.izzy2lost.weeu.settings.AudioSettingsRoute
+import com.izzy2lost.weeu.settings.GeneralSettingsRoute
+import com.izzy2lost.weeu.settings.GraphicsSettingsRoute
+import com.izzy2lost.weeu.settings.InputSettingsRoute
+import com.izzy2lost.weeu.settings.OverlaySettingsRoute
 import com.izzy2lost.weeu.settings.SettingsRoute
 import com.izzy2lost.weeu.settings.settingsNavigation
 import com.izzy2lost.weeu.titlemanager.TitleManagerRoute
@@ -92,15 +100,21 @@ private fun MainNav() {
         gameListNavigation(
             navController = navController,
             startGame = { startGame(context, it) },
-            createShortcut = { createShortcutForGame(context, it) }
-        ) {
-            GameListToolBarActionsMenu(
-                goToSettings = { navController.navigate(SettingsRoute) },
-                goToTitleManager = { navController.navigate(TitleManagerRoute) },
-                goToGraphicPacks = { navController.navigate(GraphicPacksRoute) },
-                goToAboutCemu = { navController.navigate(AboutCemuRoute) }
-            )
-        }
+            createShortcut = { createShortcutForGame(context, it) },
+            gameListToolBarActions = {
+                GameListToolBarActionsMenu(
+                    goToTitleManager = { navController.navigate(TitleManagerRoute) },
+                    goToGraphicPacks = { navController.navigate(GraphicPacksRoute) },
+                    goToAboutCemu = { navController.navigate(AboutCemuRoute) }
+                )
+            },
+            goToGeneralSettings = { navController.navigate(GeneralSettingsRoute) },
+            goToInputSettings = { navController.navigate(InputSettingsRoute) },
+            goToGraphicsSettings = { navController.navigate(GraphicsSettingsRoute) },
+            goToAudioSettings = { navController.navigate(AudioSettingsRoute) },
+            goToOverlaySettings = { navController.navigate(OverlaySettingsRoute) },
+            goToAccountSettings = { navController.navigate(AccountSettingsRoute) }
+        )
         settingsNavigation(navController)
         titleManagerNavigation(navController)
         graphicPacksNavigation(navController)
@@ -110,7 +124,6 @@ private fun MainNav() {
 
 @Composable
 private fun GameListToolBarActionsMenu(
-    goToSettings: () -> Unit,
     goToTitleManager: () -> Unit,
     goToGraphicPacks: () -> Unit,
     goToAboutCemu: () -> Unit,
@@ -141,10 +154,6 @@ private fun GameListToolBarActionsMenu(
         expanded = expandMenu,
         onDismissRequest = { expandMenu = false }
     ) {
-        DropdownMenuItem(
-            onClick = goToSettings,
-            text = tr("Settings")
-        )
         DropdownMenuItem(
             onClick = goToGraphicPacks,
             text = tr("Graphic packs")

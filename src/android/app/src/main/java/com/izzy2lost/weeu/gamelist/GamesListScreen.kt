@@ -1,14 +1,19 @@
 @file:OptIn(
     ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class,
+    ExperimentalMaterial3ExpressiveApi::class,
 )
 
 package com.izzy2lost.weeu.gamelist
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.combinedClickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.fillMaxSize
@@ -19,14 +24,27 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AccountCircle
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Gamepad
+import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.GraphicEq
+import androidx.compose.material.icons.filled.Headphones
+import androidx.compose.material.icons.filled.Layers
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FloatingActionButtonMenu
+import androidx.compose.material3.FloatingActionButtonMenuItem
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.ToggleFloatingActionButton
+import androidx.compose.material3.ToggleFloatingActionButtonDefaults
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
@@ -38,6 +56,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -47,6 +66,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -71,6 +92,12 @@ fun GamesListScreen(
     startGame: (Game) -> Unit,
     createShortcut: (Game) -> Unit,
     toolbarActions: @Composable RowScope.() -> Unit,
+    goToGeneralSettings: () -> Unit,
+    goToInputSettings: () -> Unit,
+    goToGraphicsSettings: () -> Unit,
+    goToAudioSettings: () -> Unit,
+    goToOverlaySettings: () -> Unit,
+    goToAccountSettings: () -> Unit,
 ) {
     val lifecycleOwner = LocalLifecycleOwner.current
     val lifecycleState by lifecycleOwner.lifecycle.currentStateFlow.collectAsState()
@@ -79,8 +106,11 @@ fun GamesListScreen(
     val snackbarHostState = remember { SnackbarHostState() }
     val gameSearchQuery by gameListViewModel.filterText.collectAsStateWithLifecycle()
     val games by gameListViewModel.games.collectAsStateWithLifecycle()
+    var fabExpanded by rememberSaveable { mutableStateOf(false) }
 
     val state = rememberPullToRefreshState()
+
+    BackHandler(fabExpanded) { fabExpanded = false }
 
     LaunchedEffect(lifecycleState) {
         if (lifecycleState == Lifecycle.State.RESUMED && gameListViewModel.gamePathsHaveChanged())
@@ -103,6 +133,18 @@ fun GamesListScreen(
                 onValueChange = gameListViewModel::setFilterText
             )
         },
+        floatingActionButton = {
+            SettingsFabMenu(
+                expanded = fabExpanded,
+                onExpandChange = { fabExpanded = it },
+                goToGeneralSettings = goToGeneralSettings,
+                goToInputSettings = goToInputSettings,
+                goToGraphicsSettings = goToGraphicsSettings,
+                goToAudioSettings = goToAudioSettings,
+                goToOverlaySettings = goToOverlaySettings,
+                goToAccountSettings = goToAccountSettings
+            )
+        }
     ) { scaffoldPadding ->
         Box(
             modifier = Modifier
@@ -286,6 +328,84 @@ private fun GameListItem(
             onRemoveShaderCaches = onRemoveShaderCaches,
             onAboutTitle = onAboutTitle,
             onCreateShortcut = onCreateShortcut,
+        )
+    }
+}
+
+@Composable
+private fun SettingsFabMenu(
+    expanded: Boolean,
+    onExpandChange: (Boolean) -> Unit,
+    goToGeneralSettings: () -> Unit,
+    goToInputSettings: () -> Unit,
+    goToGraphicsSettings: () -> Unit,
+    goToAudioSettings: () -> Unit,
+    goToOverlaySettings: () -> Unit,
+    goToAccountSettings: () -> Unit,
+) {
+    FloatingActionButtonMenu(
+        expanded = expanded,
+        button = {
+            ToggleFloatingActionButton(
+                checked = expanded,
+                onCheckedChange = { onExpandChange(!expanded) }
+            ) {
+                Icon(
+                    imageVector = if (expanded) Icons.Filled.Close else Icons.Filled.Settings,
+                    contentDescription = tr("Settings")
+                )
+            }
+        }
+    ) {
+        val textColor = if (isSystemInDarkTheme()) Color.White else Color.Black
+        
+        FloatingActionButtonMenuItem(
+            onClick = {
+                goToGeneralSettings()
+                onExpandChange(false)
+            },
+            icon = { Icon(Icons.Filled.Settings, contentDescription = null, tint = textColor) },
+            text = { Text(tr("General"), color = textColor) }
+        )
+        FloatingActionButtonMenuItem(
+            onClick = {
+                goToInputSettings()
+                onExpandChange(false)
+            },
+            icon = { Icon(Icons.Filled.Gamepad, contentDescription = null, tint = textColor) },
+            text = { Text(tr("Input"), color = textColor) }
+        )
+        FloatingActionButtonMenuItem(
+            onClick = {
+                goToGraphicsSettings()
+                onExpandChange(false)
+            },
+            icon = { Icon(Icons.Filled.GraphicEq, contentDescription = null, tint = textColor) },
+            text = { Text(tr("Graphics"), color = textColor) }
+        )
+        FloatingActionButtonMenuItem(
+            onClick = {
+                goToAudioSettings()
+                onExpandChange(false)
+            },
+            icon = { Icon(Icons.Filled.Headphones, contentDescription = null, tint = textColor) },
+            text = { Text(tr("Audio"), color = textColor) }
+        )
+        FloatingActionButtonMenuItem(
+            onClick = {
+                goToOverlaySettings()
+                onExpandChange(false)
+            },
+            icon = { Icon(Icons.Filled.Layers, contentDescription = null, tint = textColor) },
+            text = { Text(tr("Overlay"), color = textColor) }
+        )
+        FloatingActionButtonMenuItem(
+            onClick = {
+                goToAccountSettings()
+                onExpandChange(false)
+            },
+            icon = { Icon(Icons.Filled.AccountCircle, contentDescription = null, tint = textColor) },
+            text = { Text(tr("Account"), color = textColor) }
         )
     }
 }

@@ -178,7 +178,7 @@ XMLConfigParser CemuConfig::Load(XMLConfigParser& parser)
 		notification.text_scale = notification_node.get("TextScale", 100);
 		notification.controller_profiles = notification_node.get("ControllerProfiles", true);
 		notification.controller_battery = notification_node.get("ControllerBattery", false);
-		notification.shader_compiling = notification_node.get("ShaderCompiling", true);
+		notification.shader_compiling = notification_node.get("ShaderCompiling", false);
 		notification.friends = notification_node.get("FriendService", true);
 	}
 

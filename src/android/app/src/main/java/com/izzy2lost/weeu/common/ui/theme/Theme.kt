@@ -18,41 +18,50 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
-// Wee U brand color
+// Wee U brand colors
 private val WeeUCyan = Color(0xFF009ac7)
-private val WeeUCyanLight = Color(0xFF33b0d5)
-private val WeeUCyanDark = Color(0xFF007a9f)
+private val WeeUGray = Color(0xFF8b8b8b)
+private val WeeUWhite = Color(0xFFFFFFFF)
+private val WeeUBlack = Color(0xFF000000)
 
-// Dark theme with cyan background and accents
+// Dark theme - black background with cyan and gray accents
 private val DarkColorScheme = darkColorScheme(
     primary = WeeUCyan,
-    onPrimary = Color.White,
-    primaryContainer = WeeUCyanDark,
-    onPrimaryContainer = Color.White,
-    secondary = WeeUCyanLight,
-    onSecondary = Color.White,
-    background = WeeUCyan,
-    onBackground = Color.White,
-    surface = WeeUCyan,
-    onSurface = Color.White,
-    surfaceVariant = WeeUCyanDark,
-    onSurfaceVariant = Color.White,
+    onPrimary = WeeUBlack,
+    primaryContainer = WeeUCyan,
+    onPrimaryContainer = WeeUBlack,
+    secondary = WeeUGray,
+    onSecondary = WeeUBlack,
+    tertiary = WeeUCyan,
+    onTertiary = WeeUBlack,
+    background = WeeUBlack,
+    onBackground = WeeUWhite,
+    surface = Color(0xFF1A1A1A),
+    onSurface = WeeUWhite,
+    surfaceVariant = Color(0xFF2A2A2A),
+    onSurfaceVariant = WeeUGray,
+    outline = WeeUGray,
+    outlineVariant = Color(0xFF3A3A3A),
 )
 
-// Light theme with cyan text and accents
+// Light theme - white background with cyan and gray accents
 private val LightColorScheme = lightColorScheme(
     primary = WeeUCyan,
-    onPrimary = Color.White,
-    primaryContainer = WeeUCyanLight,
+    onPrimary = WeeUWhite,
+    primaryContainer = Color(0xFFE0F7FF),
     onPrimaryContainer = WeeUCyan,
-    secondary = WeeUCyanDark,
-    onSecondary = Color.White,
-    background = Color.White,
-    onBackground = WeeUCyan,
-    surface = Color.White,
-    onSurface = WeeUCyan,
+    secondary = WeeUGray,
+    onSecondary = WeeUWhite,
+    tertiary = WeeUCyan,
+    onTertiary = WeeUWhite,
+    background = WeeUWhite,
+    onBackground = WeeUBlack,
+    surface = WeeUWhite,
+    onSurface = WeeUBlack,
     surfaceVariant = Color(0xFFF5F5F5),
-    onSurfaceVariant = WeeUCyan,
+    onSurfaceVariant = WeeUGray,
+    outline = WeeUGray,
+    outlineVariant = Color(0xFFE0E0E0),
 )
 
 /**

@@ -44,6 +44,12 @@ fun NavGraphBuilder.gameListNavigation(
     startGame: (NativeGameTitles.Game) -> Unit,
     createShortcut: (NativeGameTitles.Game) -> Unit,
     gameListToolBarActions: @Composable (RowScope.() -> Unit),
+    goToGeneralSettings: () -> Unit,
+    goToInputSettings: () -> Unit,
+    goToGraphicsSettings: () -> Unit,
+    goToAudioSettings: () -> Unit,
+    goToOverlaySettings: () -> Unit,
+    goToAccountSettings: () -> Unit,
 ) {
     navigation<GameListRoute>(startDestination = GameListRoutes.GamesRoute) {
         composable<GameListRoutes.GamesRoute> { backStackEntry ->
@@ -59,7 +65,13 @@ fun NavGraphBuilder.gameListNavigation(
                     gameViewModel.game = game
                     navController.navigate(GameListRoutes.GameDetailsRoute)
                 },
-                toolbarActions = gameListToolBarActions
+                toolbarActions = gameListToolBarActions,
+                goToGeneralSettings = goToGeneralSettings,
+                goToInputSettings = goToInputSettings,
+                goToGraphicsSettings = goToGraphicsSettings,
+                goToAudioSettings = goToAudioSettings,
+                goToOverlaySettings = goToOverlaySettings,
+                goToAccountSettings = goToAccountSettings
             )
         }
         composableGameScreen<GameListRoutes.GameDetailsRoute>(navController) { game ->
