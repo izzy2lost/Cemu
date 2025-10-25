@@ -107,9 +107,12 @@ fun GameDetails(game: Game, gameInfo: GameInfo?) {
     }
     
     // Local game information
-    TitleDetailsEntry(entryName = tr("Title ID"), entryData = game.titleId)
-    TitleDetailsEntry(entryName = tr("Version"), entryData = game.version)
-    TitleDetailsEntry(entryName = tr("DLC"), entryData = game.dlc)
+    TitleDetailsEntry(
+        entryName = tr("Title ID"),
+        entryData = game.titleId.toString(16).uppercase().padStart(16, '0')
+    )
+    TitleDetailsEntry(entryName = tr("Version"), entryData = game.version.toString())
+    TitleDetailsEntry(entryName = tr("DLC"), entryData = game.dlc.toString())
     TitleDetailsEntry(
         entryName = tr("You've played"),
         entryData = getTimePlayed(game)
