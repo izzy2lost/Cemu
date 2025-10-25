@@ -558,16 +558,16 @@ private fun GameCoverItem(
         coverFile = result
     }
     
-    Card(
-        modifier = modifier
-            .padding(4.dp)
-            .combinedClickable(
-                onClick = { onStartGame(game) },
-                onLongClick = { contextMenuExpanded = true }
-            )
+    Column(
+        modifier = modifier.padding(4.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Column(
-            horizontalAlignment = Alignment.CenterHorizontally
+        Card(
+            modifier = Modifier
+                .combinedClickable(
+                    onClick = { onStartGame(game) },
+                    onLongClick = { contextMenuExpanded = true }
+                )
         ) {
             Box(
                 modifier = Modifier
@@ -607,18 +607,18 @@ private fun GameCoverItem(
                     )
                 }
             }
-            
-            Text(
-                text = game.name ?: "",
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(8.dp),
-                style = MaterialTheme.typography.bodySmall,
-                maxLines = 2,
-                overflow = TextOverflow.Ellipsis,
-                textAlign = TextAlign.Center
-            )
         }
+        
+        Text(
+            text = game.name ?: "",
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 8.dp, vertical = 4.dp),
+            style = MaterialTheme.typography.bodySmall,
+            maxLines = 2,
+            overflow = TextOverflow.Ellipsis,
+            textAlign = TextAlign.Center
+        )
         
         GameContextMenu(
             expanded = contextMenuExpanded,

@@ -63,7 +63,7 @@ private val LightColorScheme = lightColorScheme(
     surface = WeeUWhite,
     onSurface = WeeUBlack,
     surfaceVariant = Color(0xFFF5F5F5),
-    onSurfaceVariant = WeeUGray,
+    onSurfaceVariant = WeeUBlack,  // Changed to black for better icon visibility
     outline = WeeUGray,
     outlineVariant = Color(0xFFE0E0E0),
 )
