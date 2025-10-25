@@ -30,9 +30,11 @@ private inline fun <reified T : Any> NavGraphBuilder.composableGameScreen(
     navController: NavController,
     noinline content: @Composable (AnimatedContentScope.(NativeGameTitles.Game) -> Unit),
 ) {
-    composable<T> { backStackEntry ->
-        val parentEntry = navController.getBackStackEntry(GameListRoute)
-        val game = viewModel<GameViewModel>(parentEntry).game ?: return@composable
+    composable<T> {
+        val previousBackStackEntry =
+            navController.previousBackStackEntry ?: return@composable
+        val game =
+            viewModel<GameViewModel>(previousBackStackEntry).game ?: return@composable
         content(game)
     }
 }

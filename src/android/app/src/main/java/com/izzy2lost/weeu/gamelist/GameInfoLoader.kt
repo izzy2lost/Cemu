@@ -77,8 +77,9 @@ object GameInfoLoader {
                             }
                             "id" -> {
                                 if (inGame) {
-                                    parser.next()
-                                    currentGameId = parser.text
+                                    if (parser.next() == XmlPullParser.TEXT) {
+                                        currentGameId = parser.text
+                                    }
                                 }
                             }
                             "locale" -> {
@@ -88,26 +89,30 @@ object GameInfoLoader {
                             }
                             "title" -> {
                                 if (inLocale) {
-                                    parser.next()
-                                    title = parser.text
+                                    if (parser.next() == XmlPullParser.TEXT) {
+                                        title = parser.text
+                                    }
                                 }
                             }
                             "synopsis" -> {
                                 if (inLocale) {
-                                    parser.next()
-                                    synopsis = parser.text
+                                    if (parser.next() == XmlPullParser.TEXT) {
+                                        synopsis = parser.text
+                                    }
                                 }
                             }
                             "developer" -> {
                                 if (inGame) {
-                                    parser.next()
-                                    developer = parser.text
+                                    if (parser.next() == XmlPullParser.TEXT) {
+                                        developer = parser.text
+                                    }
                                 }
                             }
                             "publisher" -> {
                                 if (inGame) {
-                                    parser.next()
-                                    publisher = parser.text
+                                    if (parser.next() == XmlPullParser.TEXT) {
+                                        publisher = parser.text
+                                    }
                                 }
                             }
                             "date" -> {
@@ -120,8 +125,9 @@ object GameInfoLoader {
                             }
                             "genre" -> {
                                 if (inGame) {
-                                    parser.next()
-                                    genre = parser.text
+                                    if (parser.next() == XmlPullParser.TEXT) {
+                                        genre = parser.text
+                                    }
                                 }
                             }
                             "rating" -> {
@@ -134,8 +140,9 @@ object GameInfoLoader {
                             }
                             "descriptor" -> {
                                 if (inRating) {
-                                    parser.next()
-                                    parser.text?.let { ratingDescriptors.add(it) }
+                                    if (parser.next() == XmlPullParser.TEXT) {
+                                        parser.text?.let { ratingDescriptors.add(it) }
+                                    }
                                 }
                             }
                             "wi-fi" -> {
@@ -146,8 +153,9 @@ object GameInfoLoader {
                             }
                             "feature" -> {
                                 if (inWifi) {
-                                    parser.next()
-                                    parser.text?.let { wifiFeatures.add(it) }
+                                    if (parser.next() == XmlPullParser.TEXT) {
+                                        parser.text?.let { wifiFeatures.add(it) }
+                                    }
                                 }
                             }
                             "input" -> {
