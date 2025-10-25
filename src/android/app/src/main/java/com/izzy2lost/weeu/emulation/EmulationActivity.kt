@@ -257,7 +257,10 @@ class EmulationActivity : AppCompatActivity() {
             onClick = inputOverlaySurfaceView::resetInputs
         )
 
-        exitMenuItem.configure(tr("Exit"), onClick = ::showExitConfirmationDialog)
+        exitMenuItem.configure(tr("Exit"), onClick = {
+            NativeEmulation.stopGame()
+            finish()
+        })
     }
 
     private fun initializeView(launchPath: String) {

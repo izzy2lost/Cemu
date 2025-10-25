@@ -267,3 +267,9 @@ Java_com_izzy2lost_weeu_nativeinterface_NativeEmulation_startGame([[maybe_unused
 	NativeEmulation::initializeAudioDevices();
 	return NativeEmulation::startGame(JNIUtils::toString(env, launchPath));
 }
+
+extern "C" [[maybe_unused]] JNIEXPORT void JNICALL
+Java_com_izzy2lost_weeu_nativeinterface_NativeEmulation_stopGame([[maybe_unused]] JNIEnv* env, [[maybe_unused]] jclass clazz)
+{
+	CafeSystem::ShutdownTitle();
+}

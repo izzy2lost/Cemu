@@ -9,6 +9,7 @@ import android.os.Bundle
 import android.provider.DocumentsContract
 import android.widget.Toast
 import androidx.activity.ComponentActivity
+import androidx.activity.OnBackPressedCallback
 import androidx.activity.compose.setContent
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
@@ -76,6 +77,23 @@ class MainActivity : ComponentActivity() {
                 }
             }
         }
+        
+        onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                showExitConfirmationDialog()
+            }
+        })
+    }
+    
+    private fun showExitConfirmationDialog() {
+        androidx.appcompat.app.AlertDialog.Builder(this)
+            .setTitle(tr("Exit"))
+            .setMessage(tr("Do you want to exit the app?"))
+            .setPositiveButton(tr("Yes")) { _, _ ->
+                finish()
+            }
+            .setNegativeButton(tr("No"), null)
+            .show()
     }
 
     override fun onDestroy() {
