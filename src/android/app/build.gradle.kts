@@ -247,4 +247,6 @@ dependencies {
     implementation(libs.androidx.navigation.compose)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.compose.material3.adaptive)
+    implementation(libs.coil.compose)
+    implementation(libs.coil.network.okhttp)
 }

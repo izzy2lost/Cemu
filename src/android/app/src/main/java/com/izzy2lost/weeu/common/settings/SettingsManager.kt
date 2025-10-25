@@ -19,13 +19,19 @@ class EmulationSettings(sharedPreferences: SharedPreferences) {
     var gamePadPosition by sharedPreferences.enumPref(GamePadPosition.RIGHT)
 }
 
+enum class GameListViewMode {
+    LIST,
+    COVER
+}
+
 class GuiSettings(sharedPreferences: SharedPreferences) {
     var language by sharedPreferences.stringPref(DEFAULT_LANGUAGE)
+    var gameListViewMode by sharedPreferences.enumPref(GameListViewMode.LIST)
 }
 
 class InputOverlaySettings(sharedPreferences: SharedPreferences) {
     var isVibrateOnTouchEnabled by sharedPreferences.booleanPref(false)
-    var isOverlayEnabled by sharedPreferences.booleanPref(false)
+    var isOverlayEnabled by sharedPreferences.booleanPref(true)
     var controllerIndex by sharedPreferences.intPref(0)
     var alpha by sharedPreferences.intPref(64)
 }

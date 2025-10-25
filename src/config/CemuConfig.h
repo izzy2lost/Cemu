@@ -416,7 +416,7 @@ struct CemuConfig
 		sint32 text_scale = 100;
 		bool controller_profiles = true;
 		bool controller_battery = false;
-		bool shader_compiling = true;
+		bool shader_compiling = false;
 		bool friends = true;
 	} notification{};
 

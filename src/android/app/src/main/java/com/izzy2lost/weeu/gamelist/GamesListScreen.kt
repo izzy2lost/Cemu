@@ -20,6 +20,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
@@ -33,6 +34,17 @@ import androidx.compose.material.icons.filled.GraphicEq
 import androidx.compose.material.icons.filled.Headphones
 import androidx.compose.material.icons.filled.Layers
 import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material.icons.automirrored.filled.ViewList
+import androidx.compose.material.icons.filled.ViewModule
+import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.height
+import androidx.compose.material3.Card
+import androidx.compose.material3.IconButton
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
+import coil3.compose.AsyncImage
+import coil3.request.ImageRequest
+import coil3.request.crossfade
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.DropdownMenu
@@ -69,6 +81,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -78,7 +91,11 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.izzy2lost.weeu.R
 import com.izzy2lost.weeu.common.ui.components.FilledSearchToolbar
+import com.izzy2lost.weeu.common.settings.GameListViewMode
+import com.izzy2lost.weeu.common.settings.SettingsManager
+import com.izzy2lost.weeu.gamelist.cover.CoverDownloadService
 import com.izzy2lost.weeu.common.ui.localization.tr
+import java.io.File
 import com.izzy2lost.weeu.nativeinterface.NativeGameTitles
 import com.izzy2lost.weeu.nativeinterface.NativeGameTitles.Game
 import kotlinx.coroutines.delay
@@ -107,6 +124,9 @@ fun GamesListScreen(
     val gameSearchQuery by gameListViewModel.filterText.collectAsStateWithLifecycle()
     val games by gameListViewModel.games.collectAsStateWithLifecycle()
     var fabExpanded by rememberSaveable { mutableStateOf(false) }
+    var viewMode by remember { mutableStateOf(SettingsManager.guiSettings.gameListViewMode) }
+    val context = LocalContext.current
+    val coverService = remember { CoverDownloadService(context) }
 
     val state = rememberPullToRefreshState()
 
@@ -127,7 +147,18 @@ fun GamesListScreen(
         snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
         topBar = {
             FilledSearchToolbar(
-                actions = toolbarActions,
+                actions = {
+                    IconButton(onClick = {
+                        viewMode = if (viewMode == GameListViewMode.LIST) GameListViewMode.COVER else GameListViewMode.LIST
+                        SettingsManager.guiSettings.gameListViewMode = viewMode
+                    }) {
+                        Icon(
+                            imageVector = if (viewMode == GameListViewMode.LIST) Icons.Filled.ViewModule else Icons.AutoMirrored.Filled.ViewList,
+                            contentDescription = tr("Toggle view")
+                        )
+                    }
+                    toolbarActions()
+                },
                 hint = tr("Search games"),
                 query = gameSearchQuery,
                 onValueChange = gameListViewModel::setFilterText
@@ -165,6 +196,8 @@ fun GamesListScreen(
         ) {
             GameList(
                 games = games,
+                viewMode = viewMode,
+                coverService = coverService,
                 setFavorite = gameListViewModel::setGameTitleFavorite,
                 deleteShaderCaches = {
                     coroutineScope.launch { snackbarHostState.showSnackbar(tr("Shader caches removed")) }
@@ -189,6 +222,8 @@ fun GamesListScreen(
 @Composable
 private fun GameList(
     games: List<Game>,
+    viewMode: GameListViewMode,
+    coverService: CoverDownloadService,
     startGame: (Game) -> Unit,
     goToGameDetails: (Game) -> Unit,
     goToGameEditProfile: (Game) -> Unit,
@@ -200,28 +235,51 @@ private fun GameList(
         modifier = Modifier
             .padding(8.dp)
             .fillMaxSize(),
-        columns = GridCells.Adaptive(620.dp)
+        columns = if (viewMode == GameListViewMode.COVER) GridCells.Adaptive(150.dp) else GridCells.Adaptive(620.dp)
     ) {
         items(items = games, key = { it.titleId }) { game ->
             var showDeleteShaderConfirmationDialog by remember { mutableStateOf(false) }
-            GameListItem(
-                modifier = Modifier.animateItem(),
-                game = game,
-                onStartGame = startGame,
-                onIsFavoriteChanged = { isFavorite ->
-                    setFavorite(game, isFavorite)
-                },
-                onEditGameProfile = {
-                    goToGameEditProfile(game)
-                },
-                onRemoveShaderCaches = { showDeleteShaderConfirmationDialog = true },
-                onAboutTitle = {
-                    goToGameDetails(game)
-                },
-                onCreateShortcut = {
-                    createShortcut(game)
-                },
-            )
+            
+            if (viewMode == GameListViewMode.COVER) {
+                GameCoverItem(
+                    modifier = Modifier.animateItem(),
+                    game = game,
+                    coverService = coverService,
+                    onStartGame = startGame,
+                    onIsFavoriteChanged = { isFavorite ->
+                        setFavorite(game, isFavorite)
+                    },
+                    onEditGameProfile = {
+                        goToGameEditProfile(game)
+                    },
+                    onRemoveShaderCaches = { showDeleteShaderConfirmationDialog = true },
+                    onAboutTitle = {
+                        goToGameDetails(game)
+                    },
+                    onCreateShortcut = {
+                        createShortcut(game)
+                    },
+                )
+            } else {
+                GameListItem(
+                    modifier = Modifier.animateItem(),
+                    game = game,
+                    onStartGame = startGame,
+                    onIsFavoriteChanged = { isFavorite ->
+                        setFavorite(game, isFavorite)
+                    },
+                    onEditGameProfile = {
+                        goToGameEditProfile(game)
+                    },
+                    onRemoveShaderCaches = { showDeleteShaderConfirmationDialog = true },
+                    onAboutTitle = {
+                        goToGameDetails(game)
+                    },
+                    onCreateShortcut = {
+                        createShortcut(game)
+                    },
+                )
+            }
 
             if (showDeleteShaderConfirmationDialog)
                 ShaderCachesConfirmationDialog(
@@ -472,6 +530,105 @@ private fun GameContextMenu(
         GameContextMenuItem(
             onClick = onCreateShortcut,
             text = tr("Create shortcut")
+        )
+    }
+}
+
+
+@Composable
+private fun GameCoverItem(
+    game: Game,
+    coverService: CoverDownloadService,
+    onStartGame: (Game) -> Unit,
+    onIsFavoriteChanged: (Boolean) -> Unit,
+    onEditGameProfile: () -> Unit,
+    onRemoveShaderCaches: () -> Unit,
+    onAboutTitle: () -> Unit,
+    onCreateShortcut: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    var contextMenuExpanded by rememberSaveable { mutableStateOf(false) }
+    var coverFile by remember { mutableStateOf<File?>(null) }
+    
+    LaunchedEffect(game.titleId) {
+        val titleIdHex = game.titleId.toString(16).uppercase().padStart(16, '0')
+        println("Downloading cover for ${game.name} with titleId: $titleIdHex")
+        val result = coverService.downloadCover(titleIdHex)
+        println("Cover download result for ${game.name}: ${result?.absolutePath}")
+        coverFile = result
+    }
+    
+    Card(
+        modifier = modifier
+            .padding(4.dp)
+            .combinedClickable(
+                onClick = { onStartGame(game) },
+                onLongClick = { contextMenuExpanded = true }
+            )
+    ) {
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .aspectRatio(0.71f)
+            ) {
+                if (coverFile != null && coverFile!!.exists()) {
+                    AsyncImage(
+                        model = ImageRequest.Builder(LocalContext.current)
+                            .data(coverFile)
+                            .crossfade(true)
+                            .build(),
+                        contentDescription = game.name,
+                        modifier = Modifier.fillMaxSize(),
+                        contentScale = ContentScale.Fit
+                    )
+                } else {
+                    GameIcon(
+                        game = game,
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(16.dp)
+                    )
+                }
+                
+                if (game.isFavorite) {
+                    Icon(
+                        modifier = Modifier
+                            .align(Alignment.TopEnd)
+                            .padding(8.dp)
+                            .size(24.dp)
+                            .clip(CircleShape)
+                            .background(MaterialTheme.colorScheme.surfaceVariant),
+                        painter = painterResource(R.drawable.ic_favorite),
+                        tint = MaterialTheme.colorScheme.primary,
+                        contentDescription = null
+                    )
+                }
+            }
+            
+            Text(
+                text = game.name ?: "",
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(8.dp),
+                style = MaterialTheme.typography.bodySmall,
+                maxLines = 2,
+                overflow = TextOverflow.Ellipsis,
+                textAlign = TextAlign.Center
+            )
+        }
+        
+        GameContextMenu(
+            expanded = contextMenuExpanded,
+            onDismissRequest = { contextMenuExpanded = false },
+            game = game,
+            onIsFavoriteChanged = onIsFavoriteChanged,
+            onEditGameProfile = onEditGameProfile,
+            onRemoveShaderCaches = onRemoveShaderCaches,
+            onAboutTitle = onAboutTitle,
+            onCreateShortcut = onCreateShortcut,
         )
     }
 }

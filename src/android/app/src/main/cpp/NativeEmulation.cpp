@@ -89,6 +89,14 @@ namespace NativeEmulation
 		if (!fs::exists(controllerProfileFolder))
 			fs::create_directories(controllerProfileFolder);
 
+		// Initialize controller 0 with Wii U Gamepad if no profile exists
+		const auto controller0Profile = ActiveSettings::GetConfigPath("controllerProfiles/controller0.xml");
+		if (!fs::exists(controller0Profile))
+		{
+			InputManager::instance().set_controller(0, EmulatedController::Type::VPAD);
+			InputManager::instance().save(0);
+		}
+
 		const auto memorySearcherFolder = ActiveSettings::GetUserDataPath(L"memorySearcher").generic_wstring();
 		if (!fs::exists(memorySearcherFolder))
 			fs::create_directories(memorySearcherFolder);

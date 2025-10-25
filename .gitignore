@@ -57,3 +57,4 @@ bin/graphicPacks/*
 .DS_Store
 .kilocode/mcp.json
 vcpkg-android-arm64.tar.gz
+src/android/app/src/main/assets/COVER_DOWNLOAD_README.md

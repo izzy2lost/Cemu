@@ -152,7 +152,7 @@ XMLConfigParser CemuConfig::Load(XMLConfigParser& parser)
 
 		notification.controller_profiles = overlay_node.get("ControllerProfiles", true);
 		notification.controller_battery = overlay_node.get("ControllerBattery", true);
-		notification.shader_compiling = overlay_node.get("ShaderCompiling", true);
+		notification.shader_compiling = overlay_node.get("ShaderCompiling", false);
 	}
 	else
 	{
@@ -167,7 +167,7 @@ XMLConfigParser CemuConfig::Load(XMLConfigParser& parser)
 
 		notification.controller_profiles = graphic.get("OverlayControllerProfiles", true);
 		notification.controller_battery = graphic.get("OverlayControllerBattery", true);
-		notification.shader_compiling = graphic.get("ShaderCompiling", true);
+		notification.shader_compiling = graphic.get("ShaderCompiling", false);
 	}
 
 	auto notification_node = graphic.get("Notification");
