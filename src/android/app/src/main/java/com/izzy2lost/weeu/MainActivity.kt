@@ -21,7 +21,10 @@ import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.MenuDefaults
 import androidx.compose.material3.Text
+import androidx.compose.ui.graphics.Color
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -152,27 +155,43 @@ private fun GameListToolBarActionsMenu(
     }
     DropdownMenu(
         expanded = expandMenu,
-        onDismissRequest = { expandMenu = false }
+        onDismissRequest = { expandMenu = false },
+        containerColor = MaterialTheme.colorScheme.secondaryContainer
     ) {
         DropdownMenuItem(
             onClick = goToGraphicPacks,
-            text = tr("Graphic packs")
+            text = { Text(tr("Graphic packs")) },
+            colors = MenuDefaults.itemColors(
+                textColor = MaterialTheme.colorScheme.onSecondaryContainer
+            )
         )
         DropdownMenuItem(
             onClick = goToTitleManager,
-            text = tr("Title manager")
+            text = { Text(tr("Title manager")) },
+            colors = MenuDefaults.itemColors(
+                textColor = MaterialTheme.colorScheme.onSecondaryContainer
+            )
         )
         DropdownMenuItem(
             onClick = { openCemuFolder(context) },
-            text = tr("Open Cemu folder")
+            text = { Text(tr("Open Cemu folder")) },
+            colors = MenuDefaults.itemColors(
+                textColor = MaterialTheme.colorScheme.onSecondaryContainer
+            )
         )
         DropdownMenuItem(
             onClick = { shareLogFile(context) },
-            text = tr("Share log file"),
+            text = { Text(tr("Share log file")) },
+            colors = MenuDefaults.itemColors(
+                textColor = MaterialTheme.colorScheme.onSecondaryContainer
+            )
         )
         DropdownMenuItem(
             onClick = goToAboutCemu,
-            text = tr("About Cemu"),
+            text = { Text(tr("About Cemu")) },
+            colors = MenuDefaults.itemColors(
+                textColor = MaterialTheme.colorScheme.onSecondaryContainer
+            )
         )
     }
 }
