@@ -251,6 +251,19 @@ jobs:
         with:
           github-token: "${{ secrets.GITHUB_TOKEN }}"
 
+      - name: Install vcpkg dependencies for Android (arm64)
+        run: |
+          # Ensure we're at the repo root where vcpkg.json lives
+          cd "$GITHUB_WORKSPACE"
+
+          # (Optional, if your custom action doesn’t bootstrap)
+          # ./dependencies/vcpkg/bootstrap-vcpkg.sh -disableMetrics
+
+          # Install all manifest deps for the Android triplet
+          ./dependencies/vcpkg/vcpkg install \
+            --triplet arm64-android \
+            --binarycaching
+
       - name: Build Cemu
         env:
           ANDROID_STORE_FILE_BASE64: ${{ secrets.ANDROID_STORE_FILE_BASE64 }}
