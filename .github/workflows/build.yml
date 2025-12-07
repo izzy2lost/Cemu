@@ -225,7 +225,7 @@ jobs:
 
     steps:
       - name: Checkout repo
-        uses: actions/checkout@v3
+        uses: actions/checkout@v5
         with:
           submodules: "recursive"
           fetch-depth: 0
@@ -259,7 +259,7 @@ jobs:
           EMULATOR_VERSION_MAJOR: ${{ inputs.next_version_major }}
           EMULATOR_VERSION_MINOR: ${{ inputs.next_version_minor }}
         run: |
-          export JAVA_HOME=$JAVA_HOME_17_X64
+          export JAVA_HOME=$JAVA_HOME_21_X64
 
           cd ./src/android
 
@@ -275,7 +275,7 @@ jobs:
           ./gradlew testRelease
 
       - name: Upload artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: cemu-bin-android
           path: ./src/android/app/build/outputs/apk/*/*.apk
