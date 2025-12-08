@@ -46,7 +46,7 @@ val cemuDataFilesFolder = "../../../bin"
 android {
     namespace = "com.izzy2lost.weeu"
     compileSdk = 36
-    ndkVersion = "29.0.14206865"
+    ndkVersion = "28.2.13676358"
     defaultConfig {
         applicationId = "com.izzy2lost.weeu"
         minSdk = 31
@@ -102,8 +102,8 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility(JavaVersion.VERSION_17)
-        targetCompatibility(JavaVersion.VERSION_17)
+        sourceCompatibility(JavaVersion.VERSION_21)
+        targetCompatibility(JavaVersion.VERSION_21)
     }
 
     externalNativeBuild {
@@ -151,7 +151,7 @@ android {
     }
 
     kotlinOptions {
-        jvmTarget = "17"
+        jvmTarget = "21"
     }
 }
 
