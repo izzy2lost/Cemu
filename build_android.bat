@@ -97,7 +97,8 @@ echo ========================================
 echo Checking Java version...
 echo ========================================
 
-java -version 2>&1 | findstr /i "version" >nul
+REM Basic presence check without piping (avoid cmd redirection quirks)
+java -version >nul 2>nul
 if errorlevel 1 (
     echo ERROR: Java not found in PATH
     echo The build requires Java 21 or higher.
@@ -105,12 +106,13 @@ if errorlevel 1 (
     exit /b 1
 )
 
-REM Check if Java 21 or higher
-for /f "tokens=3" %%v in ('java -version 2>&1 ^| findstr /i "version"') do (
-    set JAVA_VERSION=%%v
-    set JAVA_VERSION=!JAVA_VERSION:"=!
-    for /f "tokens=1 delims=." %%a in ("!JAVA_VERSION!") do set JAVA_MAJOR=%%a
+REM Parse major version from `java -version` output
+set "JAVA_VERSION="
+for /f "tokens=3" %%v in ('java -version 2^>^&1 ^| findstr /i "version"') do (
+    set "JAVA_VERSION=%%v"
 )
+set "JAVA_VERSION=!JAVA_VERSION:"=!"
+for /f "tokens=1 delims=." %%a in ("!JAVA_VERSION!") do set "JAVA_MAJOR=%%a"
 
 if !JAVA_MAJOR! LSS 21 (
     echo WARNING: Java !JAVA_MAJOR! detected. Java 21 or higher is recommended.
@@ -127,7 +129,7 @@ if !JAVA_MAJOR! LSS 21 (
 
 REM Set environment variable to use pre-installed vcpkg dependencies
 set "VCPKG_ROOT=%CD%\dependencies\vcpkg"
-set "ANDROID_NDK_HOME=C:\Android\ndk\28.2.13676358"
+set "ANDROID_NDK_HOME=C:\Android\ndk\29.0.14206865"
 
 echo VCPKG_ROOT set to: %VCPKG_ROOT%
 echo ANDROID_NDK_HOME set to: %ANDROID_NDK_HOME%

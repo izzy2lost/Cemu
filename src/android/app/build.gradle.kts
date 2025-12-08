@@ -2,7 +2,7 @@ import com.android.build.gradle.internal.tasks.factory.dependsOn
 import java.io.IOException
 import java.security.MessageDigest
 import java.util.regex.Pattern
-import java.util.HexFormat
+import javax.xml.bind.DatatypeConverter
 
 plugins {
     alias(libs.plugins.android.application)
@@ -46,7 +46,7 @@ val cemuDataFilesFolder = "../../../bin"
 android {
     namespace = "com.izzy2lost.weeu"
     compileSdk = 36
-    ndkVersion = "28.2.13676358"
+    ndkVersion = "29.0.14206865"
     defaultConfig {
         applicationId = "com.izzy2lost.weeu"
         minSdk = 31
@@ -116,19 +116,10 @@ android {
     defaultConfig {
         externalNativeBuild {
             cmake {
-                // project.rootDir is src/android, so go up 2 levels to get to WeeU root
-                val weeURoot = project.rootDir.parentFile.parentFile
-                val vcpkgInstalledDir = File(weeURoot, "dependencies/vcpkg/installed").absolutePath
-                
                 arguments(
                     "-DANDROID_STL=c++_shared",
                     "-DENABLE_VCPKG=ON",
                     "-DVCPKG_TARGET_ANDROID=ON",
-                    "-DVCPKG_INSTALLED_DIR=$vcpkgInstalledDir",
-                    "-DVCPKG_MANIFEST_MODE=OFF",
-                    "-DVCPKG_MANIFEST_INSTALL=OFF",
-                    "-DX_VCPKG_APPLOCAL_DEPS_INSTALL=OFF",
-                    "-DPKG_CONFIG_EXECUTABLE=",
                     "-DENABLE_SDL=OFF",
                     "-DENABLE_WXWIDGETS=OFF",
                     "-DENABLE_OPENGL=OFF",
@@ -207,7 +198,7 @@ abstract class ComputeCemuDataFilesHashTask : DefaultTask() {
         md.reset()
         fileHashes.forEach { md.update(it) }
 
-        hashFile.writeText(HexFormat.of().formatHex(md.digest()).uppercase())
+        hashFile.writeText(DatatypeConverter.printHexBinary(md.digest()))
     }
 }
 

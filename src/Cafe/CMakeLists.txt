@@ -468,6 +468,8 @@ add_library(CemuCafe
   OS/libs/nsyshid/Whitelist.h
   OS/libs/nsyshid/BackendEmulated.cpp
   OS/libs/nsyshid/BackendEmulated.h
+  OS/libs/nsyshid/BackendLibusb.cpp
+  OS/libs/nsyshid/BackendLibusb.h
   OS/libs/nsyshid/Dimensions.cpp
   OS/libs/nsyshid/Dimensions.h
   OS/libs/nsyshid/Infinity.cpp
@@ -592,8 +594,6 @@ if (ENABLE_WAYLAND)
 	# PUBLIC because wayland-client.h is included in VulkanAPI.h
   target_link_libraries(CemuCafe PUBLIC Wayland::Client)
 endif()
-
-if (NOT ANDROID)
   if (ENABLE_VCPKG)
     if(WIN32)
       set(PKG_CONFIG_EXECUTABLE "${VCPKG_INSTALLED_DIR}/x64-windows/tools/pkgconf/pkgconf.exe")
